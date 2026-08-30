@@ -1,0 +1,82 @@
+{
+  "component": "bluemap-addon-adapter-api",
+  "version": "0.1.0-alpha.1",
+  "bluemap_abi": {
+    "primary_commit": "9be321df995a1103808621d529eb72773e719d4d",
+    "compatibility_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
+    "api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
+    "source_blobs": {
+      "BlueMap.java": "267ffbf5a3c8efc54f7e03ad89bc4e3ca305abbb",
+      "BlockRendererType.java": "134e2b8fd834bd8ab0aa5e8f33ab6c1a86315c7d",
+      "BlockState.java": "6fb34f8f0b2e12548e19605f28fa1f2b905b3c99",
+      "Key.java": "edce0205a38ff0d72868c33d59011fd96fe34d26",
+      "Keyed.java": "134dc9bfedca7f26c5c79cb1c2eaa034afd48bdd",
+      "Registry.java": "a8807ae482749c54635f34a79abb38283a240257",
+      "ResourcePath.java": "e83ff0c908542a84f89920d6d518c37056ccdb79",
+      "ResourcePack.java": "ed6923e373301744f12866ecd998e14a65893e65",
+      "ResourcePackExtension.java": "299528bce583f8a15e403ed08ac02e2fd5d707d9",
+      "Variant.java": "6ec583473e8860385d9dc867fa25e8123ed98d2a",
+      "VariantSet.java": "360301580ada0abb77b32fe371b55f617b58c5ae",
+      "Variants.java": "ab3fdb9f29592221cad3b07876fa8bc558e843e4"
+    }
+  },
+  "oracle_sources": [
+    {
+      "repository": "jan-guenter/bluemap-laserio-addon",
+      "commit": "72e2855e96aa759212ce381b8c05c437487ba9ae",
+      "origin_path": "src/main/java/io/github/janguenter/bluemap/laserio/adapter/bluemap522/AdapterCompatibility.java",
+      "path": "provenance/oracles/laserio/AdapterCompatibility.java",
+      "sha256": "bf9a0fe31e656dcb1621d2ce4e2617934d474607ae8177866b5a4a1fd60c9682"
+    },
+    {
+      "repository": "jan-guenter/bluemap-laserio-addon",
+      "commit": "72e2855e96aa759212ce381b8c05c437487ba9ae",
+      "origin_path": "src/main/java/io/github/janguenter/bluemap/laserio/adapter/bluemap522/RegistryGuard.java",
+      "path": "provenance/oracles/laserio/RegistryGuard.java",
+      "sha256": "fc08d87aac91d7ff096849f6679b14e57c66d35ef184e4ba9bac1c0012f3cb74"
+    },
+    {
+      "repository": "jan-guenter/bluemap-laserio-addon",
+      "commit": "72e2855e96aa759212ce381b8c05c437487ba9ae",
+      "origin_path": "src/main/java/io/github/janguenter/bluemap/laserio/adapter/bluemap522/ProfileResourceExtensionType.java",
+      "path": "provenance/oracles/laserio/ProfileResourceExtensionType.java",
+      "sha256": "5d5b886e9b40e5f7eb770edb52f865b4c69f2a3ac4132876840113f35da3721a"
+    },
+    {
+      "repository": "jan-guenter/bluemap-chipped-addon",
+      "commit": "81d0b48dc1043136176caa78affeeab0fd3511b4",
+      "origin_path": "src/main/java/io/github/janguenter/bluemap/chipped/adapter/bluemap522/BlueMap522Adapter.java",
+      "path": "provenance/oracles/chipped/BlueMap522Adapter.java",
+      "sha256": "576dd5e93bb7169c3a27a7232bac0198628c343d302606fb2bc402e83ff05cef"
+    },
+    {
+      "repository": "jan-guenter/bluemap-chipped-addon",
+      "commit": "81d0b48dc1043136176caa78affeeab0fd3511b4",
+      "origin_path": "src/main/java/io/github/janguenter/bluemap/chipped/adapter/bluemap522/ChippedResourceExtension.java",
+      "path": "provenance/oracles/chipped/ChippedResourceExtension.java",
+      "sha256": "2e79ebda2145012c6e3adad5ff5646c87b1902cb0d36737d2d28911a884e13f1"
+    }
+  ],
+  "production_sources": [
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.java",
+      "sha256": "b9f330e404cf701e5a06068d01d8144d6dd7f576cd77bc19a2ef5fe55833efe1"
+    },
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.java",
+      "sha256": "0b9db6508bb66efdb63e6b035e2d5f6309ea266b7d315df30c0a3903f63636ea"
+    },
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.java",
+      "sha256": "3e423e8226e9b08581d428777b9d49a4630683c88a4adeb578b4c157b305398a"
+    },
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.java",
+      "sha256": "4c9d697754da6d792c5b2066d8432ba68186165acd555a6a7b133dcdb85b6f82"
+    },
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.java",
+      "sha256": "3cc225bcd12b2d120ceb7cdda0d039ef61459e15393efe307cbbbc1c74aa4d1f"
+    }
+  ]
+}

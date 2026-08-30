@@ -1,0 +1,289 @@
+// SPDX-License-Identifier: MIT
+
+import groovy.json.JsonSlurper
+import groovy.xml.XmlSlurper
+import org.gradle.api.file.CopySpec
+
+plugins {
+    id 'java-library'
+    id 'checkstyle'
+    id 'maven-publish'
+}
+
+group = module_group
+version = module_version
+
+base {
+    archivesName = artifact_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+dependencies {
+    compileOnly "de.bluecolored:bluemap-core:${bluemap_version}"
+    compileOnly 'org.jetbrains:annotations:23.0.0'
+
+    testImplementation "de.bluecolored:bluemap-core:${bluemap_version}"
+    testImplementation 'org.jetbrains:annotations:23.0.0'
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+    options.compilerArgs.addAll(['-Xlint:all', '-Werror'])
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = '10.18.2'
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+def archiveMetadata = { CopySpec spec ->
+    spec.from('LICENSE') {
+        into 'META-INF'
+        rename { 'LICENSE-bluemap-addon-adapter-api' }
+    }
+    spec.from('LICENSE-BlueMap') {
+        into 'META-INF'
+    }
+    spec.from('NOTICE.md') {
+        into 'META-INF'
+        rename { 'NOTICE-bluemap-addon-adapter-api.md' }
+    }
+    spec.from('THIRD_PARTY.md') {
+        into 'META-INF'
+        rename { 'THIRD_PARTY-bluemap-addon-adapter-api.md' }
+    }
+    spec.from('provenance/origins.json') {
+        into 'META-INF/bluemap-addon-adapter-api'
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    includeEmptyDirs = false
+    manifest {
+        attributes(
+                'Implementation-Title': 'BlueMap Add-on Adapter API',
+                'Implementation-Version': project.version.toString()
+        )
+    }
+    archiveMetadata(delegate)
+}
+
+tasks.named('sourcesJar', Jar).configure {
+    includeEmptyDirs = false
+    archiveMetadata(delegate)
+}
+
+def binaryJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+def sourceJar = tasks.named('sourcesJar', Jar).flatMap { it.archiveFile }
+
+def sha256 = { byte[] bytes ->
+    java.security.MessageDigest.getInstance('SHA-256')
+            .digest(bytes).encodeHex().toString()
+}
+
+tasks.register('verifyOriginSources') {
+    inputs.files(
+            'provenance/origins.json',
+            fileTree('src/main/java') { include '**/*.java' },
+            fileTree('provenance/oracles') { include '**/*.java' }
+    )
+    doLast {
+        def provenance = new JsonSlurper().parse(file('provenance/origins.json'))
+        if (provenance.component != artifact_id
+                || provenance.version != project.version.toString()) {
+            throw new GradleException('Origin manifest identity mismatch')
+        }
+
+        def declaredProduction = provenance.production_sources.collect { it.path } as Set
+        def actualProduction = fileTree('src/main/java') {
+            include '**/*.java'
+        }.files.collect { project.relativePath(it) } as Set
+        if (declaredProduction != actualProduction) {
+            throw new GradleException("Production source tree mismatch: ${actualProduction}")
+        }
+
+        def declaredOracles = provenance.oracle_sources.collect { it.path } as Set
+        def actualOracles = fileTree('provenance/oracles') {
+            include '**/*.java'
+        }.files.collect { project.relativePath(it) } as Set
+        if (declaredOracles != actualOracles) {
+            throw new GradleException("Origin oracle tree mismatch: ${actualOracles}")
+        }
+
+        provenance.oracle_sources.each { source ->
+            if (sha256(file(source.path).bytes) != source.sha256) {
+                throw new GradleException("Frozen origin mismatch: ${source.path}")
+            }
+        }
+        provenance.production_sources.each { source ->
+            if (sha256(file(source.path).bytes) != source.sha256) {
+                throw new GradleException("Production source lock mismatch: ${source.path}")
+            }
+        }
+    }
+}
+
+tasks.register('verifyAdapterApiJar') {
+    dependsOn tasks.named('jar')
+    inputs.file(binaryJar)
+    doLast {
+        def expected = [
+                'META-INF/MANIFEST.MF',
+                'META-INF/LICENSE-bluemap-addon-adapter-api',
+                'META-INF/LICENSE-BlueMap',
+                'META-INF/NOTICE-bluemap-addon-adapter-api.md',
+                'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
+                'META-INF/bluemap-addon-adapter-api/origins.json',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.class'
+        ] as Set
+        def zip = new java.util.zip.ZipFile(inputs.files.singleFile)
+        try {
+            def entries = zip.entries().findAll { !it.directory }.collect { it.name }
+            if (entries.toSet().size() != entries.size() || entries.toSet() != expected) {
+                throw new GradleException("Adapter API JAR boundary mismatch: ${entries}")
+            }
+        } finally {
+            zip.close()
+        }
+    }
+}
+
+tasks.register('verifyAdapterApiSourcesJar') {
+    dependsOn tasks.named('sourcesJar')
+    inputs.file(sourceJar)
+    doLast {
+        def expected = [
+                'META-INF/MANIFEST.MF',
+                'META-INF/LICENSE-bluemap-addon-adapter-api',
+                'META-INF/LICENSE-BlueMap',
+                'META-INF/NOTICE-bluemap-addon-adapter-api.md',
+                'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
+                'META-INF/bluemap-addon-adapter-api/origins.json',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.java'
+        ] as Set
+        def zip = new java.util.zip.ZipFile(inputs.files.singleFile)
+        try {
+            def entries = zip.entries().findAll { !it.directory }.collect { it.name }
+            if (entries.toSet().size() != entries.size() || entries.toSet() != expected) {
+                throw new GradleException("Adapter API sources JAR boundary mismatch: ${entries}")
+            }
+        } finally {
+            zip.close()
+        }
+    }
+}
+
+publishing {
+    publications {
+        adapterApi(MavenPublication) {
+            from components.java
+            artifactId = artifact_id
+            pom {
+                name = 'BlueMap Add-on Adapter API'
+                description = 'Source-bundled BlueMap adapter primitives for independent add-ons.'
+                url = 'https://github.com/jan-guenter/bluemap-addon-adapter-api'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/license/mit'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'jan-guenter'
+                        name = 'Jan Guenter'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/jan-guenter/bluemap-addon-adapter-api.git'
+                    developerConnection =
+                            'scm:git:ssh://git@github.com/jan-guenter/bluemap-addon-adapter-api.git'
+                    url = 'https://github.com/jan-guenter/bluemap-addon-adapter-api'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri('https://maven.pkg.github.com/jan-guenter/bluemap-addon-adapter-api')
+            credentials {
+                username = System.getenv('GITHUB_ACTOR')
+                password = System.getenv('GITHUB_TOKEN')
+            }
+        }
+    }
+}
+
+tasks.register('verifyPublication') {
+    dependsOn tasks.named('generatePomFileForAdapterApiPublication')
+    dependsOn tasks.named('generateMetadataFileForAdapterApiPublication')
+    inputs.files(
+            layout.buildDirectory.file('publications/adapterApi/pom-default.xml'),
+            layout.buildDirectory.file('publications/adapterApi/module.json')
+    )
+    doLast {
+        def pom = new XmlSlurper(false, false).parse(
+                layout.buildDirectory.file('publications/adapterApi/pom-default.xml').get().asFile
+        )
+        if (pom.groupId.text() != project.group.toString()
+                || pom.artifactId.text() != artifact_id
+                || pom.version.text() != project.version.toString()
+                || pom.dependencies.dependency.size() != 0) {
+            throw new GradleException('POM identity or dependency boundary mismatch')
+        }
+
+        def metadata = new JsonSlurper().parse(
+                layout.buildDirectory.file('publications/adapterApi/module.json').get().asFile
+        )
+        if (metadata.component.group != project.group.toString()
+                || metadata.component.module != artifact_id
+                || metadata.component.version != project.version.toString()
+                || metadata.variants.any {
+                    (it.dependencies ?: []).size() != 0
+                            || (it.dependencyConstraints ?: []).size() != 0
+                }) {
+            throw new GradleException('Gradle module identity or dependency boundary mismatch')
+        }
+    }
+}
+
+tasks.named('check').configure {
+    dependsOn tasks.named('verifyOriginSources')
+    dependsOn tasks.named('verifyAdapterApiJar')
+    dependsOn tasks.named('verifyAdapterApiSourcesJar')
+}
