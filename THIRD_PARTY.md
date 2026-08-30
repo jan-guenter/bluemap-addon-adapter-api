@@ -2,7 +2,7 @@
 
 | Component | Exact use | License | Bundled |
 | --- | --- | --- | --- |
-| BlueMap core | Compile and test ABI at commits `9be321df995a1103808621d529eb72773e719d4d` and `7e07f4e74ec1e92a6ead9aa1e66054af3e133aac` | MIT | No |
+| BlueMap core | Compile and test ABI at exact feature-backport commit `7e07f4e74ec1e92a6ead9aa1e66054af3e133aac` | MIT | No |
 | BlueMapAPI | Recursive source dependency at `285c9a60eff3ac2b0cab308ce1058d1565be0971` | MIT | No |
 | JUnit Jupiter | Tests only | EPL-2.0 | No |
 | Mockito | Tests only | MIT | No |

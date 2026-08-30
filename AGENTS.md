@@ -5,7 +5,7 @@ Read this file, `README.md`, `docs/ARCHITECTURE.md`, and
 
 ## Scope
 
-Version `0.1.0-alpha.1` contains only four BlueMap-internal adapter helpers:
+Version `0.1.0-alpha.2` contains only four BlueMap-internal adapter helpers:
 
 - an exact runtime identity check for the tested 5.23 feature backport;
 - identity-safe registry admission and registration;
