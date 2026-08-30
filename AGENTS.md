@@ -1,0 +1,64 @@
+# Agent guide for BlueMap Add-on Adapter API
+
+Read this file, `README.md`, `docs/ARCHITECTURE.md`, and
+`provenance/origins.json` before changing production code.
+
+## Scope
+
+Version `0.1.0-alpha.1` contains only four BlueMap-internal adapter helpers:
+
+- exact runtime identity checks for the two released 5.22 identities and the
+  tested 5.23 feature commit;
+- identity-safe registry admission and registration;
+- a generic resource-pack extension type; and
+- exact synthetic block-state dispatch validation.
+
+Keep the production package under
+`io.github.janguenter.bluemap.addon.adapter.api.bluemap522`. The package names
+the audited internal ABI generation, which is byte-identical in the tested
+5.23 feature commit. Do not broaden a runtime identity without a source audit
+and a combined add-on gate.
+
+Consumers compile this repository's production source into their own add-on
+JAR. They do not install or nest the standalone module JAR.
+
+## Boundaries
+
+Do not add entrypoints, renderer implementations, routes, resources, profiles,
+block-entity data, candidate-mod behavior, mutable global state, or an
+installed service provider. Consumer registration plans and failure policy
+remain local.
+
+The frozen first-party origins are evidence, not production source. Keep their
+bytes and hashes unchanged. A behavior change needs a new module version,
+focused differential tests, consumer review, and another combined runtime
+gate.
+
+## Required gates
+
+Use the shared Gradle lock and clean recursive BlueMap checkouts:
+
+```bash
+flock /tmp/bluemap-gradle.lock \
+  gradle-9.4.0 --no-daemon \
+  -PbluemapSourcePath=/path/to/bluemap-5.22 clean check verifyPublication
+
+flock /tmp/bluemap-gradle.lock \
+  gradle-9.6.1 --no-daemon \
+  -PbluemapSourcePath=/path/to/bluemap-5.22 clean check verifyPublication
+
+flock /tmp/bluemap-gradle.lock \
+  gradle-9.6.1 --no-daemon \
+  -PbluemapSourcePath=/path/to/bluemap-5.23 \
+  -PbluemapExpectedCommit=7e07f4e74ec1e92a6ead9aa1e66054af3e133aac \
+  clean check verifyPublication
+```
+
+Before release, reproduce all publication files twice with Gradle 9.6.1 and
+compare every byte. Inspect both JARs and run `actionlint` after workflow
+changes.
+
+Never commit build output, credentials, consumer artifacts, pack evidence, or
+runtime results. A version increase and release require a reviewed pull
+request. The release tag must be a signed annotated `v<module_version>` tag at
+the reviewed main commit.

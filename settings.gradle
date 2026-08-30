@@ -1,0 +1,74 @@
+// SPDX-License-Identifier: MIT
+
+rootProject.name = 'bluemap-addon-adapter-api'
+
+def primaryBlueMapCommit = '9be321df995a1103808621d529eb72773e719d4d'
+def compatibilityBlueMapCommit = '7e07f4e74ec1e92a6ead9aa1e66054af3e133aac'
+def expectedBlueMapCommit = providers.gradleProperty('bluemapExpectedCommit')
+        .getOrElse(primaryBlueMapCommit)
+if (!(expectedBlueMapCommit in [primaryBlueMapCommit, compatibilityBlueMapCommit])) {
+    throw new GradleException("Unsupported BlueMap validation commit: ${expectedBlueMapCommit}")
+}
+
+def expectedBlueMapApiCommit = '285c9a60eff3ac2b0cab308ce1058d1565be0971'
+def blueMapSourcePath = providers.gradleProperty('bluemapSourcePath')
+        .getOrElse('../bluemap-backport')
+def blueMapSource = file(blueMapSourcePath)
+if (!blueMapSource.isDirectory()) {
+    throw new GradleException(
+            "BlueMap source checkout not found at ${blueMapSource}. "
+                    + 'Set -PbluemapSourcePath=<path> to an exact accepted checkout.'
+    )
+}
+
+def gitOutput = { File repository, String... arguments ->
+    providers.exec {
+        commandLine(['git', '-C', repository.absolutePath] + arguments.toList())
+        environment 'LC_ALL', 'C'
+        environment 'GIT_OPTIONAL_LOCKS', '0'
+    }.standardOutput.asText.get().trim()
+}
+
+def requireClean = { File repository, String label ->
+    def status = gitOutput(repository, 'status', '--porcelain=v1', '--untracked-files=all')
+    if (!status.isEmpty()) {
+        throw new GradleException("Refusing dirty ${label} checkout: ${status}")
+    }
+}
+
+def blueMapHead = gitOutput(blueMapSource, 'rev-parse', '--verify', 'HEAD^{commit}')
+if (blueMapHead != expectedBlueMapCommit) {
+    throw new GradleException(
+            "Refusing BlueMap ${blueMapHead}; expected ${expectedBlueMapCommit}"
+    )
+}
+requireClean(blueMapSource, 'BlueMap')
+
+def blueMapApiSource = new File(blueMapSource, 'api')
+if (!blueMapApiSource.isDirectory()) {
+    throw new GradleException('BlueMapAPI submodule is not initialized')
+}
+def blueMapApiHead = gitOutput(blueMapApiSource, 'rev-parse', '--verify', 'HEAD^{commit}')
+if (blueMapApiHead != expectedBlueMapApiCommit) {
+    throw new GradleException(
+            "Refusing BlueMapAPI ${blueMapApiHead}; expected ${expectedBlueMapApiCommit}"
+    )
+}
+requireClean(blueMapApiSource, 'BlueMapAPI')
+
+includeBuild(blueMapSource) {
+    dependencySubstitution {
+        substitute module('de.bluecolored:bluemap-core') using project(':core')
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri('https://repo.bluecolored.de/releases')
+            content { includeGroupByRegex('de\\.bluecolored.*') }
+        }
+    }
+}
