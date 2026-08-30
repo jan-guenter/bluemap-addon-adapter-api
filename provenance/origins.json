@@ -2,8 +2,7 @@
   "component": "bluemap-addon-adapter-api",
   "version": "0.1.0-alpha.1",
   "bluemap_abi": {
-    "primary_commit": "9be321df995a1103808621d529eb72773e719d4d",
-    "compatibility_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
+    "target_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
     "api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
     "source_blobs": {
       "BlueMap.java": "267ffbf5a3c8efc54f7e03ad89bc4e3ca305abbb",
@@ -59,24 +58,20 @@
   ],
   "production_sources": [
     {
-      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.java",
-      "sha256": "b9f330e404cf701e5a06068d01d8144d6dd7f576cd77bc19a2ef5fe55833efe1"
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.java",
+      "sha256": "0ff38bc9cb445dddde8cf592ecc7472a65e9198e06423ccc3748b2ce8d2c2d1a"
     },
     {
-      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.java",
-      "sha256": "0b9db6508bb66efdb63e6b035e2d5f6309ea266b7d315df30c0a3903f63636ea"
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.java",
+      "sha256": "7ac5891d2b854f394e185f98edc9f808f983cb0b8c3459c9d7f185c97e88f6fa"
     },
     {
-      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.java",
-      "sha256": "3e423e8226e9b08581d428777b9d49a4630683c88a4adeb578b4c157b305398a"
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/ResourceExtensionType.java",
+      "sha256": "1c8a725c25aeb6e21ccac3af4cf8fc922dac96f439feca09f18a0cd0e76400cd"
     },
     {
-      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.java",
-      "sha256": "4c9d697754da6d792c5b2066d8432ba68186165acd555a6a7b133dcdb85b6f82"
-    },
-    {
-      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.java",
-      "sha256": "3cc225bcd12b2d120ceb7cdda0d039ef61459e15393efe307cbbbc1c74aa4d1f"
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/SyntheticDispatch.java",
+      "sha256": "09d27e08598ced288821728d60f2e8707cc71797dc0d57f4dc572c0deb50144d"
     }
   ]
 }

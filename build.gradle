@@ -159,11 +159,10 @@ tasks.register('verifyAdapterApiJar') {
                 'META-INF/NOTICE-bluemap-addon-adapter-api.md',
                 'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
                 'META-INF/bluemap-addon-adapter-api/origins.json',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.class',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.class',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.class',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.class',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.class'
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/ResourceExtensionType.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/SyntheticDispatch.class'
         ] as Set
         def zip = new java.util.zip.ZipFile(inputs.files.singleFile)
         try {
@@ -188,11 +187,10 @@ tasks.register('verifyAdapterApiSourcesJar') {
                 'META-INF/NOTICE-bluemap-addon-adapter-api.md',
                 'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
                 'META-INF/bluemap-addon-adapter-api/origins.json',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/BlueMapRuntimeCompatibility.java',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RegistryGuard.java',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/ResourceExtensionType.java',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/RuntimeIdentity.java',
-                'io/github/janguenter/bluemap/addon/adapter/api/bluemap522/SyntheticDispatch.java'
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/ResourceExtensionType.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/SyntheticDispatch.java'
         ] as Set
         def zip = new java.util.zip.ZipFile(inputs.files.singleFile)
         try {

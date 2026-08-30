@@ -2,13 +2,7 @@
 
 rootProject.name = 'bluemap-addon-adapter-api'
 
-def primaryBlueMapCommit = '9be321df995a1103808621d529eb72773e719d4d'
-def compatibilityBlueMapCommit = '7e07f4e74ec1e92a6ead9aa1e66054af3e133aac'
-def expectedBlueMapCommit = providers.gradleProperty('bluemapExpectedCommit')
-        .getOrElse(primaryBlueMapCommit)
-if (!(expectedBlueMapCommit in [primaryBlueMapCommit, compatibilityBlueMapCommit])) {
-    throw new GradleException("Unsupported BlueMap validation commit: ${expectedBlueMapCommit}")
-}
+def expectedBlueMapCommit = '7e07f4e74ec1e92a6ead9aa1e66054af3e133aac'
 
 def expectedBlueMapApiCommit = '285c9a60eff3ac2b0cab308ce1058d1565be0971'
 def blueMapSourcePath = providers.gradleProperty('bluemapSourcePath')
@@ -17,7 +11,7 @@ def blueMapSource = file(blueMapSourcePath)
 if (!blueMapSource.isDirectory()) {
     throw new GradleException(
             "BlueMap source checkout not found at ${blueMapSource}. "
-                    + 'Set -PbluemapSourcePath=<path> to an exact accepted checkout.'
+                    + 'Set -PbluemapSourcePath=<path> to the exact feature checkout.'
     )
 }
 
