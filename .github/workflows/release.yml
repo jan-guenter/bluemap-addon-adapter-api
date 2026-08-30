@@ -29,13 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - gradle: '9.4.0'
-            bluemap_commit: 9be321df995a1103808621d529eb72773e719d4d
-          - gradle: '9.6.1'
-            bluemap_commit: 9be321df995a1103808621d529eb72773e719d4d
-          - gradle: '9.6.1'
-            bluemap_commit: 7e07f4e74ec1e92a6ead9aa1e66054af3e133aac
+        gradle: ['9.4.0', '9.6.1']
     steps:
       - name: Check out exact tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -68,11 +62,11 @@ jobs:
           distribution: temurin
           java-version: '21.0.12+8.0.LTS'
 
-      - name: Check out exact BlueMap ABI
+      - name: Check out exact BlueMap 5.23 feature target
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: jan-guenter/BlueMap
-          ref: ${{ matrix.bluemap_commit }}
+          ref: 7e07f4e74ec1e92a6ead9aa1e66054af3e133aac
           path: .ci/bluemap
           submodules: recursive
           persist-credentials: false
@@ -86,7 +80,6 @@ jobs:
       - name: Run complete gate
         run: >-
           gradle --no-daemon -PbluemapSourcePath=.ci/bluemap
-          -PbluemapExpectedCommit=${{ matrix.bluemap_commit }}
           clean check verifyPublication
 
   release:
@@ -127,11 +120,11 @@ jobs:
           distribution: temurin
           java-version: '21.0.12+8.0.LTS'
 
-      - name: Check out exact BlueMap 5.22 ABI
+      - name: Check out exact BlueMap 5.23 feature target
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: jan-guenter/BlueMap
-          ref: 9be321df995a1103808621d529eb72773e719d4d
+          ref: 7e07f4e74ec1e92a6ead9aa1e66054af3e133aac
           path: .ci/bluemap
           submodules: recursive
           persist-credentials: false

@@ -9,14 +9,12 @@ or cross-add-on state.
 
 ## Compatibility
 
-The production package names the BlueMap 5.22 internal ABI generation. The
-exact source files used by these helpers did not change in upstream 5.23 or in
-the tested Java 21 feature backport. Runtime admission remains exact by version
-and commit, so source compatibility does not become a broad release claim.
+The production package names the BlueMap 5.23 feature-backport target. Runtime
+admission remains exact by version and commit, so this is not a broad 5.23
+compatibility claim.
 
-`BlueMapRuntimeCompatibility` is the only component that defines audited
-runtime identities. Each consumer still opts into a subset, so a later BlueMap
-commit requires a module release and an explicit consumer update.
+`BlueMapRuntimeCompatibility` admits only the exact tested feature commit. A
+later BlueMap commit requires a module release and an explicit consumer update.
 
 ## Registration
 
