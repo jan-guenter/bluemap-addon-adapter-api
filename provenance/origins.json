@@ -1,6 +1,6 @@
 {
   "component": "bluemap-addon-adapter-api",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "bluemap_abi": {
     "target_commit": "7e07f4e74ec1e92a6ead9aa1e66054af3e133aac",
     "api_commit": "285c9a60eff3ac2b0cab308ce1058d1565be0971",
@@ -56,10 +56,37 @@
       "sha256": "2e79ebda2145012c6e3adad5ff5646c87b1902cb0d36737d2d28911a884e13f1"
     }
   ],
+  "registration_plan_origins": [
+    {
+      "repository": "jan-guenter/bluemap-xnet-addon",
+      "commit": "54b8158848c25fcb8d8ef9098a5318b2a9f8f304",
+      "path": "src/main/java/io/github/janguenter/bluemap/xnet/adapter/bluemap523/BlueMap523Adapter.java",
+      "git_blob": "e98ee40d11ce1abdd9cd2aa768ffafe7e3d7bda7",
+      "sha256": "4a4224e8ac433b1d3c5e1c1b415a2d6bcdbba0900f8f59329e7f472378b789a2"
+    },
+    {
+      "repository": "jan-guenter/bluemap-immersive-engineering-addon",
+      "commit": "39eb8c0c5da27079e94d05a19b2a60735f56eafc",
+      "path": "src/main/java/io/github/janguenter/bluemap/immersiveengineering/adapter/bluemap523/BlueMap523Adapter.java",
+      "git_blob": "d95c0f081a25791f65263954ca520d064fa44d2b",
+      "sha256": "cdc52f0ab033ca2ef9032292a7ab6977238bea44b6dcbc5cc105ac339f1a113b"
+    },
+    {
+      "repository": "jan-guenter/bluemap-immersive-energistics-addon",
+      "commit": "ff4e04e93c5666da816a72a427c9ee297f69f816",
+      "path": "src/main/java/io/github/janguenter/bluemap/immeng/adapter/bluemap523/BlueMap523Adapter.java",
+      "git_blob": "01cabc35bebdda4bfe553351d451ec34fbad495b",
+      "sha256": "5ed8eec09c17aa7a448a36ddc1a011cd17d717b362b9d58ae4cf98b180c1302a"
+    }
+  ],
   "production_sources": [
     {
       "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.java",
       "sha256": "0ff38bc9cb445dddde8cf592ecc7472a65e9198e06423ccc3748b2ce8d2c2d1a"
+    },
+    {
+      "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistrationPlan.java",
+      "sha256": "6f2f1bcd233df7d39a696edf4551e5f4ed16cbfa7538db0ee86c4087dfd4eea4"
     },
     {
       "path": "src/main/java/io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.java",

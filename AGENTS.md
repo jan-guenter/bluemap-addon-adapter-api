@@ -5,10 +5,11 @@ Read this file, `README.md`, `docs/ARCHITECTURE.md`, and
 
 ## Scope
 
-Version `0.1.0-alpha.2` contains only four BlueMap-internal adapter helpers:
+Version `0.1.0-alpha.3` contains only five BlueMap-internal adapter helpers:
 
 - an exact runtime identity check for the tested 5.23 feature backport;
 - identity-safe registry admission and registration;
+- an immutable ordered plan for the same guarded registry operations;
 - a generic resource-pack extension type; and
 - exact synthetic block-state dispatch validation.
 
@@ -24,8 +25,9 @@ JAR. They do not install or nest the standalone module JAR.
 
 Do not add entrypoints, renderer implementations, routes, resources, profiles,
 block-entity data, candidate-mod behavior, mutable global state, or an
-installed service provider. Consumer registration plans and failure policy
-remain local.
+installed service provider. Consumer registration candidates, ordering, plan
+instances, and failure policy remain local. The shared plan type holds no
+static or cross-add-on state and does not roll back registry mutations.
 
 The frozen first-party origins are evidence, not production source. Keep their
 bytes and hashes unchanged. A behavior change needs a new module version,
