@@ -21,8 +21,13 @@ later BlueMap commit requires a module release and an explicit consumer update.
 `RegistryGuard` checks the registry by key before mutation and accepts only an
 empty slot or the same object identity. After registering into an empty slot,
 it reads the slot again and accepts only the supplied object. Consumers still
-preflight their complete heterogeneous registration plan before applying it,
-and they retain all failure reasons.
+own the candidates, order, plan instance, and every failure reason.
+
+`RegistrationPlan` is an immutable ordered list of guarded operations. It
+preflights every candidate before applying the first operation, then registers
+in insertion order. BlueMap registries provide no rollback contract. A failed
+identity read-back stops the plan and leaves earlier successful registrations
+in place, matching the previous consumer behavior.
 
 `ResourceExtensionType` stores one exact key and factory. It does not register
 itself or retain a resource pack.
@@ -37,6 +42,6 @@ consumer routing.
 
 ## Exclusions
 
-Renderer construction, block-entity types, registration order, diagnostics,
-activation, exact mod profiles, resource closures, texture collection,
-culling, geometry, and fallback policy remain consumer code.
+Renderer construction, block-entity types, registration candidates and order,
+diagnostics, activation, exact mod profiles, resource closures, texture
+collection, culling, geometry, and fallback policy remain consumer code.

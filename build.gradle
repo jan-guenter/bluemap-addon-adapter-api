@@ -160,6 +160,9 @@ tasks.register('verifyAdapterApiJar') {
                 'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
                 'META-INF/bluemap-addon-adapter-api/origins.json',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistrationPlan.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistrationPlan$Registration.class',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistrationPlan$TypedRegistration.class',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.class',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/ResourceExtensionType.class',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/SyntheticDispatch.class'
@@ -188,6 +191,7 @@ tasks.register('verifyAdapterApiSourcesJar') {
                 'META-INF/THIRD_PARTY-bluemap-addon-adapter-api.md',
                 'META-INF/bluemap-addon-adapter-api/origins.json',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/BlueMapRuntimeCompatibility.java',
+                'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistrationPlan.java',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/RegistryGuard.java',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/ResourceExtensionType.java',
                 'io/github/janguenter/bluemap/addon/adapter/api/bluemap523/SyntheticDispatch.java'

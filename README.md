@@ -41,14 +41,17 @@ module release, consumer update, and integration run.
 - `BlueMapRuntimeCompatibility` owns the sole exact runtime identity.
 - `RegistryGuard` preserves identity-safe, idempotent registration within one
   add-on classloader.
+- `RegistrationPlan` creates immutable, ordered, consumer-owned batches of the
+  same guarded operations. It preflights the complete batch before mutation
+  and does not attempt rollback after a failed identity read-back.
 - `ResourceExtensionType` removes the repeated one-key, one-factory resource
   extension wrapper.
 - `SyntheticDispatch` validates the exact one-variant missing-model dispatch
   used by the add-ons' synthetic block states.
 
-Add-on entrypoints, renderer instances, block-entity registrations, failure
-reasons, resource admission, routes, profiles, and fallback policy remain in
-each consumer.
+Add-on entrypoints, renderer instances, registration candidates and ordering,
+failure reasons, resource admission, routes, profiles, and fallback policy
+remain in each consumer.
 
 ## Build
 
